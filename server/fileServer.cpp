@@ -25,25 +25,27 @@ int main(int argc, char **argv){
     manager.initiateListen();
 
 
+
+
     while(1){
 
-        char * data = manager.getData();
+        manager.startSession();
+
+        const char * data = manager.receiveMessage();
 
 
-        cout << data << endl;
+        cout << "fileServer.cpp: " << data << endl;
 
         cout << "converting to string" << endl;
 
         //convert it back to a string for ease of use
         string stData(data);
 
-        cout << "Back in file Server" << endl;
-        cout << stData << endl;
 
         //if has GET <filename> - then the client wants us to return a file to them
         if(stData.compare(0, 3, "GET") == 0){
             //this is a GET request
-            cout << "GEEEET" << endl;
+            cout << "This is a GET Request" << endl;
 
             int length = stData.size();
             int posTilEnd = length - 4 + 1; //minus 4 index, plus 1 because count start as 1
@@ -66,11 +68,12 @@ int main(int argc, char **argv){
 
             send = false;
 
-            string strMessage = "200:GET ENABLED " + strFileLength;
-            const char * message = strMessage.c_str();
+//            string strMessage = "200:GET ENABLED " + strFileLength;
+//            const char * message = strMessage.c_str();
 
-            cout << message << endl;
-            manager.sendMessage(message);
+//            cout << message << endl;
+
+//            manager.sendMessage(message);
 
             manager.sendMessage(fileMessage);
 
@@ -86,18 +89,37 @@ int main(int argc, char **argv){
 
             int length = stData.size();
             int posTilEnd = length - 5 + 1; //minus 5 index, plus 1 because count start as 1
-            string filename = stData.substr(5, posTilEnd);
+
+
+            unsigned int i;
+            for (i = 6; i < length; i++){
+
+
+                if(stData[i] == ' '){
+                    cout << "index of the space is: " << i << endl;
+                    break;
+                }
+            }
+
+            string filename = stData.substr(5, i-5);
+
+            //i is the index of the space
+            string fileContent = stData.substr(i+1, length-i +1);
 
             cout << "Filename: " << filename << endl;
 
-            send = true;
-            char * message = "200:SEND ENABLED";
+            //send = true;
+            //char * message = "200:SEND ENABLED";
 
-            manager.sendMessage(message);
+            //manager.sendMessage(message);
+
+            FileHelper::writeAllToFile(fileContent.c_str(), "./uploads/" + filename);
 
         }
 
     }
+
+
 
 
 

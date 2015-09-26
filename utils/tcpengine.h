@@ -16,10 +16,10 @@ class TCPEngine {
         void createSocket();
         void makeBind(int port);
         void initiateListen();
-        char * getData();
+        void startSession();
         void connectToServer(const char * host, int port);
         void sendMessage(const char * message);
-        char * receiveMessage();
+        const char * receiveMessage();
         void disconnect();
 
     private:
@@ -30,6 +30,10 @@ class TCPEngine {
         bool isServer = false;
 
         const static int BUFFERLEN = 2048;
+
+        void sendDoneMessage();
+
+        int findDoneIndex(const char * message);
 };
 
 
