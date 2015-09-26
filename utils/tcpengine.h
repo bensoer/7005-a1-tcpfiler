@@ -19,7 +19,7 @@ class TCPEngine {
         char * getData();
         void connectToServer(const char * host, int port);
         void sendMessage(const char * message);
-        char * receiveMessage();
+        char * receiveMessage(int receiveBuffer = -1);
         void disconnect();
 
     private:

@@ -125,6 +125,7 @@ void TCPEngine::connectToServer(const char * host, int port){
 
 void TCPEngine::sendMessage(const char * message){
     // Transmit data through the socket
+
     if(this->isServer){
         send (this->sessionSocketPointer, message, this->BUFFERLEN, 0);
     }else{
@@ -132,13 +133,17 @@ void TCPEngine::sendMessage(const char * message){
     }
 }
 
-char * TCPEngine::receiveMessage(){
+char * TCPEngine::receiveMessage(int receiveBuffer){
 
-    char * message = new char[this->BUFFERLEN];
+    if(receiveBuffer == -1){
+        receiveBuffer = this->BUFFERLEN;
+    }
+
+    char * message = new char[receiveBuffer];
     if(this->isServer){
-       recv(this->sessionSocketPointer, message, this->BUFFERLEN, 0);
+       recv(this->sessionSocketPointer, message, receiveBuffer, 0);
     }else{
-        recv(this->socketPointer, message, this->BUFFERLEN, 0);
+        recv(this->socketPointer, message, receiveBuffer, 0);
     }
 
     cout << message << endl;

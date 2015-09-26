@@ -6,6 +6,8 @@
 #include "../utils/filehelper.h"
 #include <iostream>
 #include <string>
+#include <string.h>
+#include <cstring>
 
 
 using namespace std;
@@ -57,7 +59,23 @@ int main(int argc, char **argv){
 
     if(mode.compare("GET") == 0){
 
-        char * returnedFileContent = manager.receiveMessage();
+        //get the buffer size out
+        char * pindex  = strrchr(returnedMessage, ' ');
+        cout << "-->" << pindex << "<--" << endl;
+
+        char * charFileSize = pindex + 1;
+        string fileSize(charFileSize);
+        cout << "FILE SIZE PARSED OUT: " << fileSize << endl;
+        int intFileSize;
+
+        stringstream ss2;
+        ss2.str(fileSize);
+        ss2 >> intFileSize;
+
+        cout << intFileSize;
+
+
+        char * returnedFileContent = manager.receiveMessage(intFileSize);
         cout << returnedFileContent << endl;
 
         size_t position = filename.find("/");

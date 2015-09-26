@@ -70,6 +70,7 @@ int main(int argc, char **argv){
             const char * message = strMessage.c_str();
 
             cout << message << endl;
+
             manager.sendMessage(message);
 
             manager.sendMessage(fileMessage);
