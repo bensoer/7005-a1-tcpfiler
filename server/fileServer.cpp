@@ -2,7 +2,9 @@
 #include "../utils/tcpengine.h"
 #include <iostream>
 #include <string>
+#include <string.h>
 #include "../utils/filehelper.h"
+#include <sstream>
 
 
 using namespace std;
@@ -49,16 +51,30 @@ int main(int argc, char **argv){
 
             cout << "Filename: " << filename << endl;
 
+
+
+            //get the file and the size
+            string contents = FileHelper::readFile(("./uploads/" + filename));
+            //string contents = FileHelper::readFile("data/" + filename);
+            const char * fileMessage = contents.c_str();
+
+
+            int fileLength = strlen(fileMessage);
+            stringstream ss;
+            ss << fileLength;
+            string strFileLength = ss.str();
+
             send = false;
-            char * message = "200:GET ENABLED";
+
+            string strMessage = "200:GET ENABLED " + strFileLength;
+            const char * message = strMessage.c_str();
 
             cout << message << endl;
             manager.sendMessage(message);
 
-            string contents = FileHelper::readFile(("./uploads/" + filename));
-            //string contents = FileHelper::readFile("data/" + filename);
-            const char * fileMessage = contents.c_str();
             manager.sendMessage(fileMessage);
+
+
 
 
         }
