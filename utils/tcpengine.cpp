@@ -105,6 +105,8 @@ void TCPEngine::connectToServer(string host, int port){
 void TCPEngine::sendMessage(string message){
     // Transmit data through the socket
 
+    int length = message.size();
+
     if(this->isServer){
         send (this->sessionSocketPointer, message.c_str(), length, 0);
         this->sendDoneMessage();

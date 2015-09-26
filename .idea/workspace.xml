@@ -12,9 +12,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="96122c14-6f1d-4850-b96c-4dccf781674b" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/uploads/testData.txt" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/utils/tcpengine.cpp" afterPath="$PROJECT_DIR$/utils/tcpengine.cpp" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/utils/tcpengine.h" afterPath="$PROJECT_DIR$/utils/tcpengine.h" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="7005-a1-tcpfiler.iws" />
@@ -79,8 +77,8 @@
       <file leaf-file-name="tcpengine.cpp" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/utils/tcpengine.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.5184502">
-              <caret line="85" column="44" selection-start-line="85" selection-start-column="44" selection-end-line="85" selection-end-column="44" />
+            <state vertical-scroll-proportion="0.55719554">
+              <caret line="107" column="32" selection-start-line="107" selection-start-column="32" selection-end-line="107" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -130,8 +128,8 @@
         <option value="$PROJECT_DIR$/uploads/testData.txt" />
         <option value="$PROJECT_DIR$/client/fileClient.cpp" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/utils/tcpengine.cpp" />
         <option value="$PROJECT_DIR$/utils/tcpengine.h" />
+        <option value="$PROJECT_DIR$/utils/tcpengine.cpp" />
       </list>
     </option>
   </component>
@@ -652,8 +650,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/utils/tcpengine.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5184502">
-          <caret line="85" column="44" selection-start-line="85" selection-start-column="44" selection-end-line="85" selection-end-column="44" />
+        <state vertical-scroll-proportion="0.55719554">
+          <caret line="107" column="32" selection-start-line="107" selection-start-column="32" selection-end-line="107" selection-end-column="32" />
           <folding />
         </state>
       </provider>
