@@ -47,15 +47,14 @@ void TCPEngine::makeBind(int port){
 
 }
 
-void TCPEngine::initiateListen(){
-    listen(this->socketPointer, 5);
+void TCPEngine::initiateListen(int maxRequestQueue){
+    listen(this->socketPointer, maxRequestQueue);
     cout << "TCP Engine Now Listening" << endl;
 }
 
 void TCPEngine::startSession(){
 
-
-        this->isServer = true;
+        this->isServer = true; //if your starting a session, your accepting, so the tcpengine will assume your a server
         socklen_t client_len= sizeof(this->client);
         if ((this->sessionSocketPointer = accept(this->socketPointer, (struct sockaddr *)&client, &client_len)) == -1)
         {
@@ -63,29 +62,8 @@ void TCPEngine::startSession(){
             exit(1);
         }else{
             cout << "Session Initiated. Now Ready To Transmit" << endl;
+            printf("Session Initiated with Client of Remote Address:  %s\n", inet_ntoa(client.sin_addr));
         }
-
-        printf(" Remote Address:  %s\n", inet_ntoa(client.sin_addr));
-
-        //bp = buf;
-        //bytes_to_read = BUFLEN;
-        char * message =  new char[this->BUFFERLEN];
-        int n;
-       /* while ((n = recv (this->sessionSocketPointer, &message, this->BUFFERLEN, 0)) < this->BUFFERLEN)
-        {
-            //message += n;
-            //concattedMessage += message;
-        }*/
-
-  //      recv(this->sessionSocketPointer, message, this->BUFFERLEN, 0);
-
-
-  //      printf ("recieved:%s\n", message);
-        //cout << message;
-
-        //send (new_sd, buf, BUFLEN, 0);
-
-   //     return message;
 }
 
 void TCPEngine::disconnect(){
@@ -94,14 +72,13 @@ void TCPEngine::disconnect(){
     }else{
         close(this->socketPointer);
     }
-
 }
 
-void TCPEngine::connectToServer(const char * host, int port){
+void TCPEngine::connectToServer(string host, int port){
 
     struct hostent	*hp;
 
-    if ((hp = gethostbyname(host)) == NULL)
+    if ((hp = gethostbyname(host.c_str())) == NULL)
     {
         fprintf(stderr, "Unknown server address\n");
         exit(1);
@@ -125,16 +102,14 @@ void TCPEngine::connectToServer(const char * host, int port){
     }
 }
 
-void TCPEngine::sendMessage(const char * message){
+void TCPEngine::sendMessage(string message){
     // Transmit data through the socket
 
-    int length = strlen(message);
-
     if(this->isServer){
-        send (this->sessionSocketPointer, message, length, 0);
+        send (this->sessionSocketPointer, message.c_str(), length, 0);
         this->sendDoneMessage();
     }else{
-        send (this->socketPointer, message, length, 0);
+        send (this->socketPointer, message.c_str(), length, 0);
         this->sendDoneMessage();
     }
 }
@@ -152,7 +127,7 @@ void TCPEngine::sendDoneMessage() {
     }
 }
 
-const char * TCPEngine::receiveMessage(){
+string TCPEngine::receiveMessage(){
 
 
     int socket = this->isServer ? this->sessionSocketPointer : this->socketPointer;
@@ -189,7 +164,7 @@ const char * TCPEngine::receiveMessage(){
 
     cout << "TCPEngine: " << totalMessage << endl;
 
-    return totalMessage.c_str();
+    return totalMessage;
 }
 
 int TCPEngine::findDoneIndex(const char *message) {
