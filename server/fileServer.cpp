@@ -25,25 +25,27 @@ int main(int argc, char **argv){
     manager.initiateListen();
 
 
+
+
     while(1){
 
-        char * data = manager.getData();
+        manager.startSession();
+
+        const char * data = manager.receiveMessage();
 
 
-        cout << data << endl;
+        cout << "fileServer.cpp: " << data << endl;
 
         cout << "converting to string" << endl;
 
         //convert it back to a string for ease of use
         string stData(data);
 
-        cout << "Back in file Server" << endl;
-        cout << stData << endl;
 
         //if has GET <filename> - then the client wants us to return a file to them
         if(stData.compare(0, 3, "GET") == 0){
             //this is a GET request
-            cout << "GEEEET" << endl;
+            cout << "This is a GET Request" << endl;
 
             int length = stData.size();
             int posTilEnd = length - 4 + 1; //minus 4 index, plus 1 because count start as 1
@@ -66,12 +68,12 @@ int main(int argc, char **argv){
 
             send = false;
 
-            string strMessage = "200:GET ENABLED " + strFileLength;
-            const char * message = strMessage.c_str();
+//            string strMessage = "200:GET ENABLED " + strFileLength;
+//            const char * message = strMessage.c_str();
 
-            cout << message << endl;
+//            cout << message << endl;
 
-            manager.sendMessage(message);
+//            manager.sendMessage(message);
 
             manager.sendMessage(fileMessage);
 
@@ -99,6 +101,8 @@ int main(int argc, char **argv){
         }
 
     }
+
+
 
 
 

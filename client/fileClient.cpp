@@ -54,28 +54,14 @@ int main(int argc, char **argv){
     const char * message = strMessage->c_str();
     manager.sendMessage(message);
 
-    char * returnedMessage = manager.receiveMessage();
+
 
 
     if(mode.compare("GET") == 0){
 
-        //get the buffer size out
-        char * pindex  = strrchr(returnedMessage, ' ');
-        cout << "-->" << pindex << "<--" << endl;
+        const char * returnedFileContent = manager.receiveMessage();
+        manager.disconnect();
 
-        char * charFileSize = pindex + 1;
-        string fileSize(charFileSize);
-        cout << "FILE SIZE PARSED OUT: " << fileSize << endl;
-        int intFileSize;
-
-        stringstream ss2;
-        ss2.str(fileSize);
-        ss2 >> intFileSize;
-
-        cout << intFileSize;
-
-
-        char * returnedFileContent = manager.receiveMessage(intFileSize);
         cout << returnedFileContent << endl;
 
         size_t position = filename.find("/");
@@ -93,6 +79,8 @@ int main(int argc, char **argv){
     }else if(mode.compare("SEND") == 0){
         cout << "Send is not implemented" << endl ;
     }
+
+
 
     return 0 ;
 }

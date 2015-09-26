@@ -52,7 +52,7 @@ void TCPEngine::initiateListen(){
     cout << "TCP Engine Now Listening" << endl;
 }
 
-char * TCPEngine::getData(){
+void TCPEngine::startSession(){
 
 
         this->isServer = true;
@@ -61,6 +61,8 @@ char * TCPEngine::getData(){
         {
             fprintf(stderr, "Can't accept client\n");
             exit(1);
+        }else{
+            cout << "Session Initiated. Now Ready To Transmit" << endl;
         }
 
         printf(" Remote Address:  %s\n", inet_ntoa(client.sin_addr));
@@ -75,15 +77,15 @@ char * TCPEngine::getData(){
             //concattedMessage += message;
         }*/
 
-        recv(this->sessionSocketPointer, message, this->BUFFERLEN, 0);
+  //      recv(this->sessionSocketPointer, message, this->BUFFERLEN, 0);
 
 
-        printf ("recieved:%s\n", message);
+  //      printf ("recieved:%s\n", message);
         //cout << message;
 
         //send (new_sd, buf, BUFLEN, 0);
 
-        return message;
+   //     return message;
 }
 
 void TCPEngine::disconnect(){
@@ -126,27 +128,106 @@ void TCPEngine::connectToServer(const char * host, int port){
 void TCPEngine::sendMessage(const char * message){
     // Transmit data through the socket
 
+    int length = strlen(message);
+
     if(this->isServer){
-        send (this->sessionSocketPointer, message, this->BUFFERLEN, 0);
+        send (this->sessionSocketPointer, message, length, 0);
+        this->sendDoneMessage();
     }else{
-        send (this->socketPointer, message, this->BUFFERLEN, 0);
+        send (this->socketPointer, message, length, 0);
+        this->sendDoneMessage();
     }
 }
 
-char * TCPEngine::receiveMessage(int receiveBuffer){
+void TCPEngine::sendDoneMessage() {
 
-    if(receiveBuffer == -1){
-        receiveBuffer = this->BUFFERLEN;
-    }
+    char * done = "DOnE!";
 
-    char * message = new char[receiveBuffer];
+    int length = strlen(done);
+
     if(this->isServer){
-       recv(this->sessionSocketPointer, message, receiveBuffer, 0);
+        send (this->sessionSocketPointer, done, length, 0);
     }else{
-        recv(this->socketPointer, message, receiveBuffer, 0);
+        send (this->socketPointer, done, length, 0);
+    }
+}
+
+const char * TCPEngine::receiveMessage(){
+
+
+    int socket = this->isServer ? this->sessionSocketPointer : this->socketPointer;
+
+    string totalMessage = "";
+
+    while(1){
+        char message[2048];
+        int n = recv(socket, message, this->BUFFERLEN, 0);
+
+        //some dumb bug it likes to recieve nothing
+        if(n == 0){
+            break;
+        }
+
+        int index = this->findDoneIndex(message);
+
+        cout << "TCPEngine: The done index is: " << index << endl;
+
+        if(index != -1){
+            cout << "a DOne! was found! Were done!" << endl;
+            message[index] = '\0';
+            totalMessage += message;
+            break;
+        }else{
+            cout << "a DOne! was not found, so we are going to keep going" << endl;
+            string tmpString(message);
+            totalMessage += tmpString;
+        }
     }
 
-    cout << message << endl;
 
-    return message;
+
+    cout << "TCPEngine: " << totalMessage << endl;
+
+    return totalMessage.c_str();
+}
+
+int TCPEngine::findDoneIndex(const char *message) {
+
+    char done[] = "DOnE!";
+
+    for(unsigned int i = 0; i < strlen(message); i++){
+
+        if(message[i] == done[0]){
+
+            cout << "found a D. Message at index: " << i << " : done: " << done[0] << endl;
+
+            unsigned int j = i;
+            int relStart = 1;
+            while(1){
+
+                j++;
+                cout << message[j] << " vs " << done[relStart] << endl;
+
+
+                if(message[j] != done[relStart]){
+                    cout << "they do not match.Aborting" << endl;
+                    break;
+                }else{
+                    cout << "They match!. Moving Forward" << endl;
+                    relStart++;
+                }
+
+                if(relStart == 5){
+                    cout << "We hit all matching!" << endl;
+                    return i;
+                }
+
+            }
+
+
+        }
+    }
+
+    return -1;
+
 }
