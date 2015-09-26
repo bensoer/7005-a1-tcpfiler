@@ -161,7 +161,7 @@ const char * TCPEngine::receiveMessage(){
 
     while(1){
         char message[2048];
-        int n = recv(socket, message, this->BUFFERLEN, 0);
+        int n = recv(socket, message, this->BUFFERLEN - 1, 0);
 
         //some dumb bug it likes to recieve nothing
         if(n == 0){
@@ -179,6 +179,7 @@ const char * TCPEngine::receiveMessage(){
             break;
         }else{
             cout << "a DOne! was not found, so we are going to keep going" << endl;
+            message[2048] = '\0';
             string tmpString(message);
             totalMessage += tmpString;
         }

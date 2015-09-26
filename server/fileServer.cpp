@@ -89,14 +89,31 @@ int main(int argc, char **argv){
 
             int length = stData.size();
             int posTilEnd = length - 5 + 1; //minus 5 index, plus 1 because count start as 1
-            string filename = stData.substr(5, posTilEnd);
+
+
+            unsigned int i;
+            for (i = 6; i < length; i++){
+
+
+                if(stData[i] == ' '){
+                    cout << "index of the space is: " << i << endl;
+                    break;
+                }
+            }
+
+            string filename = stData.substr(5, i-5);
+
+            //i is the index of the space
+            string fileContent = stData.substr(i+1, length-i +1);
 
             cout << "Filename: " << filename << endl;
 
-            send = true;
-            char * message = "200:SEND ENABLED";
+            //send = true;
+            //char * message = "200:SEND ENABLED";
 
-            manager.sendMessage(message);
+            //manager.sendMessage(message);
+
+            FileHelper::writeAllToFile(fileContent.c_str(), "./uploads/" + filename);
 
         }
 

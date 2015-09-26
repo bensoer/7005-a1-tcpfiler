@@ -12,4 +12,8 @@ Run:
 
 ./fserver
 
+To GET with the client
 ./fclient -m GET -p 7000 -h localhost -f testData.txt
+
+To SEND with the client
+./fclient -m SEND -p 7000 -h localhost -f testData.txt

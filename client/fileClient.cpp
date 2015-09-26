@@ -51,15 +51,18 @@ int main(int argc, char **argv){
     manager.connectToServer(host, port);
     //char message[] = "SEND jkdlsklkl";
     string * strMessage = new string(mode + " " + filename);
-    const char * message = strMessage->c_str();
-    manager.sendMessage(message);
 
 
 
 
     if(mode.compare("GET") == 0){
 
+        cout << "Preparing to GET file" << endl;
+
+        const char * message = strMessage->c_str();
+        manager.sendMessage(message);
         const char * returnedFileContent = manager.receiveMessage();
+        cout << "Recieved File. "<< filename << ". Now Disconnecting" << endl;
         manager.disconnect();
 
         cout << returnedFileContent << endl;
@@ -67,20 +70,45 @@ int main(int argc, char **argv){
         size_t position = filename.find("/");
         string file = "";
         if(position != string::npos){
-            cout << "There is a slash to parce out of the filename";
+            cout << "There is a slash to parce out of the filename" << endl;
             file = filename.substr(position, filename.size());
         }else{
-            cout << "There is no slash to parce out of the filename";
+            cout << "There is no slash to parce out of the filename" << endl;
             file = filename;
         }
+
+        cout << "Writing File Contents to File" << endl;
         FileHelper::writeAllToFile(returnedFileContent, "./data/" + file);
 
 
     }else if(mode.compare("SEND") == 0){
-        cout << "Send is not implemented" << endl ;
+        //cout << "Send is not implemented" << endl ;
+
+        cout << "Preparing to send File Contents" << endl;
+
+        size_t position = filename.find("/");
+        string file = "";
+        if(position != string::npos){
+            cout << "There is a slash to parce out of the filename" << endl;
+            file = filename.substr(position, filename.size());
+        }else{
+            cout << "There is no slash to parce out of the filename" << endl;
+            file = filename;
+        }
+        cout << "Reading File: " << file << endl;
+        string fileContents = FileHelper::readFile("./data/" + file);
+
+        *strMessage += " " + fileContents;
+        const char * message = strMessage->c_str();
+        manager.sendMessage(message);
+
+        cout << "File Sent. Disconnecting" << endl;
+
+        manager.disconnect();
+
     }
 
-
+    cout << "Terminating Program" << endl;
 
     return 0 ;
 }
