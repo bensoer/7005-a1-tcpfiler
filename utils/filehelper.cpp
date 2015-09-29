@@ -26,7 +26,7 @@ string FileHelper::readFile(string directory) {
     }
 }
 
-void FileHelper::writeAllToFile(const char *text, string directory) {
+void FileHelper::writeAllToFile(string text, string directory) {
 
     ofstream ofs;
     ofs.open (directory.c_str(), ofstream::binary | ofstream::out | ofstream::trunc);

@@ -12,7 +12,7 @@ using namespace std;
 class FileHelper {
     public:
         static string readFile(string directory);
-        static void writeAllToFile(const char * text, string directory);
+        static void writeAllToFile(string text, string directory);
 
 };
 

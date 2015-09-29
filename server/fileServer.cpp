@@ -31,7 +31,7 @@ int main(int argc, char **argv){
 
         manager.startSession();
 
-        const char * data = manager.receiveMessage();
+        string data = manager.receiveMessage();
 
 
         cout << "fileServer.cpp: " << data << endl;
@@ -39,7 +39,7 @@ int main(int argc, char **argv){
         cout << "converting to string" << endl;
 
         //convert it back to a string for ease of use
-        string stData(data);
+        string stData = data;
 
 
         //if has GET <filename> - then the client wants us to return a file to them
@@ -75,7 +75,7 @@ int main(int argc, char **argv){
 
 //            manager.sendMessage(message);
 
-            manager.sendMessage(fileMessage);
+            manager.sendMessage(contents);
 
 
 

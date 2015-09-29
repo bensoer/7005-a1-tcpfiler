@@ -61,7 +61,7 @@ int main(int argc, char **argv){
 
         const char * message = strMessage->c_str();
         manager.sendMessage(message);
-        const char * returnedFileContent = manager.receiveMessage();
+        string returnedFileContent = manager.receiveMessage();
         cout << "Recieved File. "<< filename << ". Now Disconnecting" << endl;
         manager.disconnect();
 
