@@ -2,6 +2,8 @@
 
 ##Setup
 
+All Compiling and Running is assumed to be executed from the project root
+
 ###To Compile
 
 Compile the Server<br>
