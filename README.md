@@ -31,17 +31,19 @@ Tests executed by using a sample text file called textData.txt and transferring 
 . Data is used to represent the clients local directory, and the Upload folder is used as the servers local file directories.
 All file parameters use a relative path from these directory locations.
 
-Server is started as such
+Server is started as such <br><br>
 ![](imgs/server_start.png)
 
 Then Calling the SEND Route several times to ensure buffer clearing. When calling send remember to remove the file from
 the uploads folder and make sure the file you want to send (testData.txt) is in the data folder. 
 Make sure not to delete the uploads folder itself, only its file contents. Execute the call to SEND
 and then view the file in the uploads folder. The data should be identicle to the file from the data folder
-[[imgs/send_data.png]]
+<br><br>
+![](imgs/send_data.png)
 
 Then Calling the GET Route several times to ensure buffer clearing. When calling get remember to remove the file from
 the data folder and make sure the file you want to send (testData.txt) is in the upload folder. 
 Make sure not to delete the data folder itself, only its file contents. Execute the call to SEND
 and then view the file in the data folder. The data should be identicle to the file from the uploads folder
-[[imgs/get_data.png]]
+<br><br>
+![](imgs/get_data.png)
