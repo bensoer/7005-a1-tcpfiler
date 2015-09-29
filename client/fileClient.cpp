@@ -65,8 +65,6 @@ int main(int argc, char **argv){
         cout << "Recieved File. "<< filename << ". Now Disconnecting" << endl;
         manager.disconnect();
 
-        cout << returnedFileContent << endl;
-
         size_t position = filename.find("/");
         string file = "";
         if(position != string::npos){

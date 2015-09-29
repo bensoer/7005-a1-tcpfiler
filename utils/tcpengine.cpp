@@ -162,10 +162,6 @@ string TCPEngine::receiveMessage(){
         }
     }
 
-
-
-    cout << "TCPEngine: " << totalMessage << endl;
-
     return totalMessage;
 }
 
@@ -177,26 +173,18 @@ int TCPEngine::findDoneIndex(const char *message) {
 
         if(message[i] == done[0]){
 
-            cout << "found a D. Message at index: " << i << " : done: " << done[0] << endl;
-
             unsigned int j = i;
             int relStart = 1;
             while(1){
 
                 j++;
-                cout << message[j] << " vs " << done[relStart] << endl;
-
-
                 if(message[j] != done[relStart]){
-                    cout << "they do not match.Aborting" << endl;
                     break;
                 }else{
-                    cout << "They match!. Moving Forward" << endl;
                     relStart++;
                 }
 
                 if(relStart == 5){
-                    cout << "We hit all matching!" << endl;
                     return i;
                 }
 
