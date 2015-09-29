@@ -32,7 +32,7 @@ Tests executed by using a sample text file called textData.txt and transferring 
 All file parameters use a relative path from these directory locations.
 
 Server is started as such
-[[imgs/server_start.png]]
+![](imgs/server_start.png)
 
 Then Calling the SEND Route several times to ensure buffer clearing. When calling send remember to remove the file from
 the uploads folder and make sure the file you want to send (testData.txt) is in the data folder. 
