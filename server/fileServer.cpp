@@ -31,7 +31,7 @@ int main(int argc, char **argv){
 
         manager.startSession();
 
-        const char * data = manager.receiveMessage();
+        string data = manager.receiveMessage();
 
 
         cout << "fileServer.cpp: " << data << endl;
@@ -39,7 +39,7 @@ int main(int argc, char **argv){
         cout << "converting to string" << endl;
 
         //convert it back to a string for ease of use
-        string stData(data);
+        string stData = data;
 
 
         //if has GET <filename> - then the client wants us to return a file to them
@@ -53,11 +53,7 @@ int main(int argc, char **argv){
 
             cout << "Filename: " << filename << endl;
 
-
-
-            //get the file and the size
             string contents = FileHelper::readFile(("./uploads/" + filename));
-            //string contents = FileHelper::readFile("data/" + filename);
             const char * fileMessage = contents.c_str();
 
 
@@ -68,17 +64,7 @@ int main(int argc, char **argv){
 
             send = false;
 
-//            string strMessage = "200:GET ENABLED " + strFileLength;
-//            const char * message = strMessage.c_str();
-
-//            cout << message << endl;
-
-//            manager.sendMessage(message);
-
-            manager.sendMessage(fileMessage);
-
-
-
+            manager.sendMessage(contents);
 
         }
 
@@ -108,20 +94,8 @@ int main(int argc, char **argv){
 
             cout << "Filename: " << filename << endl;
 
-            //send = true;
-            //char * message = "200:SEND ENABLED";
-
-            //manager.sendMessage(message);
-
             FileHelper::writeAllToFile(fileContent.c_str(), "./uploads/" + filename);
 
         }
-
     }
-
-
-
-
-
-    //return 0 ;
 }

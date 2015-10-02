@@ -19,7 +19,9 @@
 
 using namespace std;
 
-
+/**
+ * createSocket initiates a socket. If there is an error the method will terminate the program
+ */
 void TCPEngine::createSocket(){
     // Create a stream socket
     if ((this->socketPointer = socket(AF_INET, SOCK_STREAM, 0)) == -1)
@@ -31,6 +33,11 @@ void TCPEngine::createSocket(){
     }
 }
 
+/**
+ * makeBind binds the socket to a parameter passed port. createSocket is required to be called before this function.
+ * If there is an error, this function will terminate the program.
+ * @param port int the port number to bind with
+ */
 void TCPEngine::makeBind(int port){
 
     this->server.sin_family = AF_INET;
@@ -47,15 +54,21 @@ void TCPEngine::makeBind(int port){
 
 }
 
-void TCPEngine::initiateListen(){
-    listen(this->socketPointer, 5);
+/**
+ * initiateListen will call the listen function to enable the server to listen for connections
+ * @param maxRequestQueue int the max number of pending connection requests that will be queued
+ */
+void TCPEngine::initiateListen(int maxRequestQueue){
+    listen(this->socketPointer, maxRequestQueue);
     cout << "TCP Engine Now Listening" << endl;
 }
 
+/**
+ * startSession is a server function that accepts a connection and establishes the TCP client and server
+ */
 void TCPEngine::startSession(){
 
-
-        this->isServer = true;
+        this->isServer = true; //if your starting a session, your accepting, so the tcpengine will assume your a server
         socklen_t client_len= sizeof(this->client);
         if ((this->sessionSocketPointer = accept(this->socketPointer, (struct sockaddr *)&client, &client_len)) == -1)
         {
@@ -63,45 +76,31 @@ void TCPEngine::startSession(){
             exit(1);
         }else{
             cout << "Session Initiated. Now Ready To Transmit" << endl;
+            printf("Session Initiated with Client of Remote Address:  %s\n", inet_ntoa(client.sin_addr));
         }
-
-        printf(" Remote Address:  %s\n", inet_ntoa(client.sin_addr));
-
-        //bp = buf;
-        //bytes_to_read = BUFLEN;
-        char * message =  new char[this->BUFFERLEN];
-        int n;
-       /* while ((n = recv (this->sessionSocketPointer, &message, this->BUFFERLEN, 0)) < this->BUFFERLEN)
-        {
-            //message += n;
-            //concattedMessage += message;
-        }*/
-
-  //      recv(this->sessionSocketPointer, message, this->BUFFERLEN, 0);
-
-
-  //      printf ("recieved:%s\n", message);
-        //cout << message;
-
-        //send (new_sd, buf, BUFLEN, 0);
-
-   //     return message;
 }
 
+/**
+ * disconnect closes the TCP connection
+ */
 void TCPEngine::disconnect(){
     if(this->isServer){
         close (this->sessionSocketPointer);
     }else{
         close(this->socketPointer);
     }
-
 }
 
-void TCPEngine::connectToServer(const char * host, int port){
+/**
+ * connectToServer is a client function that connect to a passed in host and port
+ * @param host string the host to connect to. This is the url that will be DNS resolved
+ * @param port int the port number to connect on the server
+ */
+void TCPEngine::connectToServer(string host, int port){
 
     struct hostent	*hp;
 
-    if ((hp = gethostbyname(host)) == NULL)
+    if ((hp = gethostbyname(host.c_str())) == NULL)
     {
         fprintf(stderr, "Unknown server address\n");
         exit(1);
@@ -125,20 +124,27 @@ void TCPEngine::connectToServer(const char * host, int port){
     }
 }
 
-void TCPEngine::sendMessage(const char * message){
+/**
+ * sendMessage sends a string message across the socket. It is assumed connection has been established
+ * @param message string the message being sent across the network
+ */
+void TCPEngine::sendMessage(string message){
     // Transmit data through the socket
 
-    int length = strlen(message);
+    int length = message.size();
 
     if(this->isServer){
-        send (this->sessionSocketPointer, message, length, 0);
+        send (this->sessionSocketPointer, message.c_str(), length, 0);
         this->sendDoneMessage();
     }else{
-        send (this->socketPointer, message, length, 0);
+        send (this->socketPointer, message.c_str(), length, 0);
         this->sendDoneMessage();
     }
 }
 
+/**
+ * sendDoneMessage is a private fuction used by receiveMessage to identify the end of a messege segment being sent
+ */
 void TCPEngine::sendDoneMessage() {
 
     char * done = "DOnE!";
@@ -152,7 +158,10 @@ void TCPEngine::sendDoneMessage() {
     }
 }
 
-const char * TCPEngine::receiveMessage(){
+/**
+ * receiverMessage listens for incoming messages being sent through the socket.
+ */
+string TCPEngine::receiveMessage(){
 
 
     int socket = this->isServer ? this->sessionSocketPointer : this->socketPointer;
@@ -185,13 +194,14 @@ const char * TCPEngine::receiveMessage(){
         }
     }
 
-
-
-    cout << "TCPEngine: " << totalMessage << endl;
-
-    return totalMessage.c_str();
+    return totalMessage;
 }
 
+/**
+ * findDoneIndex searches through the passed in message for the DOnE! value in the message and returns its index, so that
+ * it can be parced out and the appropriate message passed back
+ * @param message const char pointer the message being searched for the DOnE! message
+ */
 int TCPEngine::findDoneIndex(const char *message) {
 
     char done[] = "DOnE!";
@@ -200,26 +210,18 @@ int TCPEngine::findDoneIndex(const char *message) {
 
         if(message[i] == done[0]){
 
-            cout << "found a D. Message at index: " << i << " : done: " << done[0] << endl;
-
             unsigned int j = i;
             int relStart = 1;
             while(1){
 
                 j++;
-                cout << message[j] << " vs " << done[relStart] << endl;
-
-
                 if(message[j] != done[relStart]){
-                    cout << "they do not match.Aborting" << endl;
                     break;
                 }else{
-                    cout << "They match!. Moving Forward" << endl;
                     relStart++;
                 }
 
                 if(relStart == 5){
-                    cout << "We hit all matching!" << endl;
                     return i;
                 }
 
