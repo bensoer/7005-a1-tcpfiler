@@ -49,3 +49,6 @@ Make sure not to delete the data folder itself, only its file contents. Execute 
 and then view the file in the data folder. The data should be identicle to the file from the uploads folder
 <br><br>
 ![](imgs/get_data.png)
+
+###Design Docs - Finite State Diagram
+See 7005-A1-FSM.pdf for Finite State Machine Diagram Designs for the fileClient.cpp and fileServer.cpp
