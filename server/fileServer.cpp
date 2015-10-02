@@ -4,6 +4,7 @@
 #include <string>
 #include <string.h>
 #include "../utils/filehelper.h"
+#include <sstream>
 
 
 using namespace std;
