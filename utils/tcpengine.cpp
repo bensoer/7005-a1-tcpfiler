@@ -19,7 +19,9 @@
 
 using namespace std;
 
-
+/**
+ * createSocket initiates a socket. If there is an error the method will terminate the program
+ */
 void TCPEngine::createSocket(){
     // Create a stream socket
     if ((this->socketPointer = socket(AF_INET, SOCK_STREAM, 0)) == -1)
@@ -31,6 +33,11 @@ void TCPEngine::createSocket(){
     }
 }
 
+/**
+ * makeBind binds the socket to a parameter passed port. createSocket is required to be called before this function.
+ * If there is an error, this function will terminate the program.
+ * @param port int the port number to bind with
+ */
 void TCPEngine::makeBind(int port){
 
     this->server.sin_family = AF_INET;
@@ -47,11 +54,18 @@ void TCPEngine::makeBind(int port){
 
 }
 
+/**
+ * initiateListen will call the listen function to enable the server to listen for connections
+ * @param maxRequestQueue int the max number of pending connection requests that will be queued
+ */
 void TCPEngine::initiateListen(int maxRequestQueue){
     listen(this->socketPointer, maxRequestQueue);
     cout << "TCP Engine Now Listening" << endl;
 }
 
+/**
+ * startSession is a server function that accepts a connection and establishes the TCP client and server
+ */
 void TCPEngine::startSession(){
 
         this->isServer = true; //if your starting a session, your accepting, so the tcpengine will assume your a server
@@ -66,6 +80,9 @@ void TCPEngine::startSession(){
         }
 }
 
+/**
+ * disconnect closes the TCP connection
+ */
 void TCPEngine::disconnect(){
     if(this->isServer){
         close (this->sessionSocketPointer);
@@ -74,6 +91,11 @@ void TCPEngine::disconnect(){
     }
 }
 
+/**
+ * connectToServer is a client function that connect to a passed in host and port
+ * @param host string the host to connect to. This is the url that will be DNS resolved
+ * @param port int the port number to connect on the server
+ */
 void TCPEngine::connectToServer(string host, int port){
 
     struct hostent	*hp;
@@ -102,6 +124,10 @@ void TCPEngine::connectToServer(string host, int port){
     }
 }
 
+/**
+ * sendMessage sends a string message across the socket. It is assumed connection has been established
+ * @param message string the message being sent across the network
+ */
 void TCPEngine::sendMessage(string message){
     // Transmit data through the socket
 
@@ -116,6 +142,9 @@ void TCPEngine::sendMessage(string message){
     }
 }
 
+/**
+ * sendDoneMessage is a private fuction used by receiveMessage to identify the end of a messege segment being sent
+ */
 void TCPEngine::sendDoneMessage() {
 
     char * done = "DOnE!";
@@ -129,6 +158,9 @@ void TCPEngine::sendDoneMessage() {
     }
 }
 
+/**
+ * receiverMessage listens for incoming messages being sent through the socket.
+ */
 string TCPEngine::receiveMessage(){
 
 
@@ -165,6 +197,11 @@ string TCPEngine::receiveMessage(){
     return totalMessage;
 }
 
+/**
+ * findDoneIndex searches through the passed in message for the DOnE! value in the message and returns its index, so that
+ * it can be parced out and the appropriate message passed back
+ * @param message const char pointer the message being searched for the DOnE! message
+ */
 int TCPEngine::findDoneIndex(const char *message) {
 
     char done[] = "DOnE!";

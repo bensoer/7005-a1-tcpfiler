@@ -4,7 +4,6 @@
 #include <string>
 #include <string.h>
 #include "../utils/filehelper.h"
-#include <sstream>
 
 
 using namespace std;
@@ -53,11 +52,7 @@ int main(int argc, char **argv){
 
             cout << "Filename: " << filename << endl;
 
-
-
-            //get the file and the size
             string contents = FileHelper::readFile(("./uploads/" + filename));
-            //string contents = FileHelper::readFile("data/" + filename);
             const char * fileMessage = contents.c_str();
 
 
@@ -68,17 +63,7 @@ int main(int argc, char **argv){
 
             send = false;
 
-//            string strMessage = "200:GET ENABLED " + strFileLength;
-//            const char * message = strMessage.c_str();
-
-//            cout << message << endl;
-
-//            manager.sendMessage(message);
-
             manager.sendMessage(contents);
-
-
-
 
         }
 
@@ -108,20 +93,8 @@ int main(int argc, char **argv){
 
             cout << "Filename: " << filename << endl;
 
-            //send = true;
-            //char * message = "200:SEND ENABLED";
-
-            //manager.sendMessage(message);
-
             FileHelper::writeAllToFile(fileContent.c_str(), "./uploads/" + filename);
 
         }
-
     }
-
-
-
-
-
-    //return 0 ;
 }
